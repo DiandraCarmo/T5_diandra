@@ -1,0 +1,25 @@
+{
+  "name": "t5",
+  "version": "1.0.0",
+  "description": "Implementar o backend, com banco, para cumprir as requisições especificadas em [`REQUESTS.http`](REQUESTS.http).",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/corporativa-2026/template.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/corporativa-2026/template/issues"
+  },
+  "homepage": "https://github.com/corporativa-2026/template#readme",
+  "dependencies": {
+    "better-sqlite3": "^13.0.3"
+  }
+}

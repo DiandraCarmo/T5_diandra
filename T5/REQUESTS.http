@@ -1,0 +1,121 @@
+# Referência sobre Multiple Choice Questions (MCQs):
+# https://www.csu.edu.au/division/learning-teaching/assessments/assessment-types/exams/multiple-choice-questions
+
+@host = localhost:9090
+@token = super-secret-token
+### GET QUESTIONS
+GET /questions HTTP/1.1
+Host: {{host}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+
+# Deve retornar as questões, no máximo 10 (use LIMIT)
+# [
+#   {"stem": "How many days are there in a week?", "id": 1},
+#   {"stem": "What do humans need to breathe to survive?", "id": 2}
+# ]
+# Se não há questões, devolve um array vazio, mas deixe pelo menos estas duas
+# questões como seed
+# []
+
+# Tenha em consideração que a ordem das propriedades no json
+# não precisa ser a mesma, ex.: {"id": 1, "stem": "How many days are there in a week?"} é ok!
+
+### GET A SPECIFIC QUESTION
+GET /questions/1
+Host: {{host}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+# Deve retornar uma questão completa
+# {
+#   "stem": "How many days are there in a week?",
+#   "answer": "7 days",
+#   "distractors": [
+#     "5 days", "8 days", "1 week"
+#   ],
+#   "random": false
+# }
+# stem é a pergunta em si
+# answer é a resposta correta
+# distractors são as respostas incorretas
+# random é para dizer se ela deve ser exibida com opções organizadas aleatoriamente
+
+
+### CREATE A NEW QUESTION
+POST /question
+Host: {{host}}
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "stem": "What is the most likely reason someone opens the fridge for the third time?",
+  "answer": "New food might have spawned",
+  "distractors": [
+    "They forgot what they wanted", "They are conducting an experiment", "The fridge told them to"
+  ],
+  "random": true
+}
+
+# Deve retornar a questão com o ID gerado, por exemplo:
+# {
+#   "id": 3,
+#   "stem": "What is the most likely reason someone opens the fridge for the third time?",
+#   "answer": "New food might have spawned",
+#   "distractors": [
+#     "They forgot what they wanted", "They are conducting an experiment", "The fridge told them to"
+#   ],
+#   "random": true
+# }
+
+
+### GET A SPECIFIC QUESTION AND TRY TO ANSWER IT
+GET /answers/1
+Host: {{host}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+# Deve retornar uma questão sem a resposta:
+# {
+#   "question": "How many days are there in a week?",
+#   "alternatives": ["7 days", "5 days", "8 days", "1 week"]
+# }
+# As alternatives são a junção da resposta correta com os distractors, e devem ser embaralhadas se random for true.
+
+### SEND THE ANSWER
+POST /answer/1
+Host: {{host}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+  "choice": "7 days"
+}
+
+# Deve retornar:
+# {
+#   "right": true
+# }
+# ou false se estiver incorreta.
+
+### GET ANOTHER QUESTION AND TRY TO ANSWER IT
+GET /answers/3
+Host: {{host}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+# Deve retornar uma questão sem a resposta,
+# com as opções ordenadas aleatoriamente se random é true
+# {
+#   "question": "How many days are there in a week?",
+#   "alternatives": [
+#     "They forgot what they wanted",
+#     "The fridge told them to",
+#     "New food might have spawned",
+#     "They are conducting an experiment"
+#   ]
+# }
+
+# fazer um GET de novo pode trazer as alternatives em uma ordem diferente
